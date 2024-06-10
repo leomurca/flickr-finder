@@ -29,7 +29,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
     val searchQuery = viewModel.searchQuery.collectAsState()
 
     when (val value = state.value) {
-        is HomeViewModel.UiState.Loaded -> {
+        is HomeViewModel.UiState.Loaded.Success -> {
             Column {
                 SearchBar(
                     query = searchQuery.value,
@@ -67,6 +67,10 @@ fun HomeScreen(viewModel: HomeViewModel) {
                     modifier = Modifier.fillMaxSize()
                 )
             }
+        }
+
+        is HomeViewModel.UiState.Loaded.Error -> {
+            Text(text = value.message)
         }
 
         is HomeViewModel.UiState.Loading -> {
