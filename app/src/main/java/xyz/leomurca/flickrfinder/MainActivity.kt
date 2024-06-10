@@ -5,10 +5,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import xyz.leomurca.flickrfinder.ui.home.HomeScreen
 import xyz.leomurca.flickrfinder.ui.home.HomeViewModel
 import xyz.leomurca.flickrfinder.ui.theme.FlickrFinderTheme
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val viewModel: HomeViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
