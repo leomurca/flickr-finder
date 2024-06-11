@@ -15,6 +15,7 @@ retrofit = "1.0.0"
 retrofit2 = "2.11.0"
 hiltAndroidX = "1.2.0"
 navigation = "2.7.7"
+kotlinxCoroutinesTest = "1.8.0"
 
 [libraries]
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -40,6 +41,7 @@ retrofit-retrofit2-kotlinx-serialization-converter = { group = "com.jakewharton.
 retrofit2-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltAndroidX" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
