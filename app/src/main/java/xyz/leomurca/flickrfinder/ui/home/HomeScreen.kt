@@ -60,30 +60,28 @@ fun HomeScreen(viewModel: HomeViewModel) {
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
             when (val value = uiState.value) {
-                is HomeViewModel.UiState.Loaded.Success -> {
-                    if (value.photos.isEmpty()) {
-                        EmptyStatePlaceholder()
-                    } else {
-                        LazyVerticalStaggeredGrid(
-                            columns = StaggeredGridCells.Fixed(2),
-                            verticalItemSpacing = 4.dp,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp),
-                            content = {
-                                items(value.photos) {
-                                    AsyncImage(
-                                        model = it.media,
-                                        contentScale = ContentScale.Crop,
-                                        contentDescription = it.description,
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .wrapContentHeight()
-                                    )
-                                }
-                            },
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
+                is HomeViewModel.UiState.Loaded.Success.PopulatedState -> {
+                    LazyVerticalStaggeredGrid(
+                        columns = StaggeredGridCells.Fixed(2),
+                        verticalItemSpacing = 4.dp,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        content = {
+                            items(value.photos) {
+                                AsyncImage(
+                                    model = it.media,
+                                    contentScale = ContentScale.Crop,
+                                    contentDescription = it.description,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .wrapContentHeight()
+                                )
+                            }
+                        },
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
+
+                is HomeViewModel.UiState.Loaded.Success.EmptyState -> EmptyStatePlaceholder()
 
                 is HomeViewModel.UiState.Loaded.Error -> {
                     Text(text = value.message)

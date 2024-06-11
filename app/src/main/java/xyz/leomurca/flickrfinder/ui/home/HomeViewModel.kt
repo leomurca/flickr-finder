@@ -38,7 +38,11 @@ class HomeViewModel @Inject constructor(
             _uiState.value = UiState.Loading
             _uiState.value = photoRepository.search(_searchQuery.value).map {
                 when (it) {
-                    is PhotoResult.Success -> UiState.Loaded.Success(it.data)
+                    is PhotoResult.Success -> {
+                        if (it.data.isEmpty()) UiState.Loaded.Success.EmptyState
+                        else UiState.Loaded.Success.PopulatedState(it.data)
+                    }
+
                     is PhotoResult.Error -> UiState.Loaded.Error(it.message)
                 }
             }.first()
@@ -49,7 +53,11 @@ class HomeViewModel @Inject constructor(
         data object Loading : UiState
 
         sealed class Loaded : UiState {
-            data class Success(val photos: List<PhotoMetadata>) : Loaded()
+            sealed class Success : Loaded() {
+                data class PopulatedState(val photos: List<PhotoMetadata>) : Success()
+                data object EmptyState : Success()
+            }
+
             data class Error(val message: String) : Loaded()
         }
     }
