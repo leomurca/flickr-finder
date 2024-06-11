@@ -8,6 +8,7 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
+import xyz.leomurca.flickrfinder.BuildConfig
 import xyz.leomurca.flickrfinder.network.NetworkDataSource
 import xyz.leomurca.flickrfinder.network.ApiService
 import xyz.leomurca.flickrfinder.network.RemoteNetworkDataSource
@@ -27,7 +28,7 @@ internal object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideNetworkDataSource(apiService: ApiService, json: Json): NetworkDataSource {
+    fun provideNetworkDataSource(apiService: ApiService): NetworkDataSource {
         return RemoteNetworkDataSource(apiService)
     }
 
@@ -42,7 +43,7 @@ internal object NetworkModule {
     fun provideRetrofit(json: Json): Retrofit {
         val contentType = "application/json".toMediaType()
         return Retrofit.Builder()
-            .baseUrl("https://api.flickr.com/services/feeds/")
+            .baseUrl(BuildConfig.API_BASE_URL)
             .addConverterFactory(json.asConverterFactory(contentType))
             .build()
     }
