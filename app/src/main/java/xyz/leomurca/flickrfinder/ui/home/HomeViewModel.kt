@@ -7,8 +7,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.updateAndGet
+import kotlinx.coroutines.launch
 import xyz.leomurca.flickrfinder.data.model.PhotoMetadata
 import xyz.leomurca.flickrfinder.data.model.PhotoResult
 import xyz.leomurca.flickrfinder.data.repository.PhotoRepository
@@ -16,27 +21,34 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    photoRepository: PhotoRepository
+    private val photoRepository: PhotoRepository
 ) : ViewModel() {
 
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
 
-    val uiState: StateFlow<UiState> =
-        photoRepository.search(emptyList()).map {
-            when (it) {
-                is PhotoResult.Success -> UiState.Loaded.Success(it.data)
-                is PhotoResult.Error -> UiState.Loaded.Error(it.message)
-            }
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = UiState.Loading,
-        )
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    val uiState = _uiState.asStateFlow()
 
+    init {
+        searchPhotos()
+    }
 
     fun onSearchQueryChange(text: String) {
         _searchQuery.value = text
+        searchPhotos()
+    }
+
+    private fun searchPhotos() {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+            _uiState.value = photoRepository.search(_searchQuery.value).map {
+                when (it) {
+                    is PhotoResult.Success -> UiState.Loaded.Success(it.data)
+                    is PhotoResult.Error -> UiState.Loaded.Error(it.message)
+                }
+            }.first()
+        }
     }
 
     sealed interface UiState {

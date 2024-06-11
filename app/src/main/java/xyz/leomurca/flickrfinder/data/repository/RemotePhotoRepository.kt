@@ -16,8 +16,8 @@ class RemotePhotoRepository @Inject constructor(
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
     private val dataSource: NetworkDataSource,
 ) : PhotoRepository {
-    override fun search(keywords: List<String>): Flow<PhotoResult<List<PhotoMetadata>>> = flow {
-        when (val result = dataSource.searchPhotos(query = keywords.joinToString(","))) {
+    override fun search(query: String): Flow<PhotoResult<List<PhotoMetadata>>> = flow {
+        when (val result = dataSource.searchPhotos(query = query)) {
             is NetworkResult.Success -> emit(
                 PhotoResult.Success(
                     result.data.items.map {
