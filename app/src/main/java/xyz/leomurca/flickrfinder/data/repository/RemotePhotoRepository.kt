@@ -10,11 +10,14 @@ import xyz.leomurca.flickrfinder.di.AppDispatchers.IO
 import xyz.leomurca.flickrfinder.di.Dispatcher
 import xyz.leomurca.flickrfinder.network.NetworkDataSource
 import xyz.leomurca.flickrfinder.network.NetworkResult
+import xyz.leomurca.flickrfinder.util.DateFormatter
+import xyz.leomurca.flickrfinder.util.DatePattern
 import javax.inject.Inject
 
 class RemotePhotoRepository @Inject constructor(
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
     private val dataSource: NetworkDataSource,
+    private val dateFormatter: DateFormatter
 ) : PhotoRepository {
     override fun search(query: String): Flow<PhotoResult<List<PhotoMetadata>>> = flow {
         when (val result = dataSource.searchPhotos(query = query)) {
@@ -25,9 +28,9 @@ class RemotePhotoRepository @Inject constructor(
                             title = it.title,
                             link = it.link,
                             media = it.media.m,
-                            dateTaken = it.dateTaken,
+                            dateTaken = dateFormatter.dateStringToPattern(it.dateTaken, DatePattern.FULL_MONTH_DAY_COMMA_YEAR),
                             description = it.description,
-                            published = it.published,
+                            published = dateFormatter.dateStringToPattern(it.published, DatePattern.FULL_MONTH_DAY_COMMA_YEAR),
                             author = it.author,
                             authorId = it.authorId,
                             tags = it.tags.split(" ")

@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-private val LocalDetailsViewModel = compositionLocalOf<DetailsViewModel> {
+val LocalDetailsViewModel = compositionLocalOf<DetailsViewModel> {
     error("DetailsViewModel not provided")
 }
 
