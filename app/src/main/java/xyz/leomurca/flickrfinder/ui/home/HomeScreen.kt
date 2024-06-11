@@ -1,5 +1,6 @@
 package xyz.leomurca.flickrfinder.ui.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -28,12 +29,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import xyz.leomurca.flickrfinder.ui.details.DetailsViewModel
 import xyz.leomurca.flickrfinder.ui.extensions.shimmerEffect
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(viewModel: HomeViewModel) {
+fun HomeScreen(onTapPhoto: () -> Unit, viewModel: HomeViewModel = hiltViewModel(), detailsViewModel: DetailsViewModel) {
     val uiState = viewModel.uiState.collectAsState()
     val searchQuery = viewModel.searchQuery.collectAsState()
 
@@ -74,6 +77,10 @@ fun HomeScreen(viewModel: HomeViewModel) {
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .wrapContentHeight()
+                                        .clickable {
+                                            detailsViewModel.setCurrentPhoto(it)
+                                            onTapPhoto.invoke()
+                                        }
                                 )
                             }
                         },

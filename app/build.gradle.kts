@@ -65,6 +65,8 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.retrofit.retrofit2.kotlinx.serialization.converter)
     implementation(libs.retrofit2.retrofit)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
     kapt(libs.hilt.compiler)
 
     androidTestImplementation(libs.androidx.junit)

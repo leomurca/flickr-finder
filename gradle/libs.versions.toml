@@ -13,6 +13,8 @@ coil = "2.6.0"
 kotlinxSerializationJson = "1.6.0"
 retrofit = "1.0.0"
 retrofit2 = "2.11.0"
+hiltAndroidX = "1.2.0"
+navigation = "2.7.7"
 
 [libraries]
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -36,6 +38,8 @@ coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 retrofit-retrofit2-kotlinx-serialization-converter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofit" }
 retrofit2-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
+androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltAndroidX" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
