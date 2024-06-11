@@ -16,15 +16,18 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import xyz.leomurca.flickrfinder.ui.extensions.shimmerEffect
 
@@ -58,24 +61,28 @@ fun HomeScreen(viewModel: HomeViewModel) {
         Box(modifier = Modifier.padding(paddingValues)) {
             when (val value = uiState.value) {
                 is HomeViewModel.UiState.Loaded.Success -> {
-                    LazyVerticalStaggeredGrid(
-                        columns = StaggeredGridCells.Fixed(2),
-                        verticalItemSpacing = 4.dp,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        content = {
-                            items(value.photos) {
-                                AsyncImage(
-                                    model = it.media,
-                                    contentScale = ContentScale.Crop,
-                                    contentDescription = it.description,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .wrapContentHeight()
-                                )
-                            }
-                        },
-                        modifier = Modifier.fillMaxSize()
-                    )
+                    if (value.photos.isEmpty()) {
+                        EmptyStatePlaceholder()
+                    } else {
+                        LazyVerticalStaggeredGrid(
+                            columns = StaggeredGridCells.Fixed(2),
+                            verticalItemSpacing = 4.dp,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            content = {
+                                items(value.photos) {
+                                    AsyncImage(
+                                        model = it.media,
+                                        contentScale = ContentScale.Crop,
+                                        contentDescription = it.description,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .wrapContentHeight()
+                                    )
+                                }
+                            },
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
                 }
 
                 is HomeViewModel.UiState.Loaded.Error -> {
@@ -109,6 +116,22 @@ private fun LoadingPlaceholder(index: Int) {
                 .width(200.dp)
                 .height(if (isEven) 200.dp else 300.dp)
                 .shimmerEffect()
+        )
+    }
+}
+
+@Composable
+private fun EmptyStatePlaceholder() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = "No photos available",
+            fontSize = 20.sp,
+            style = MaterialTheme.typography.titleLarge
         )
     }
 }
